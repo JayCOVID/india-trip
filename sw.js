@@ -1,6 +1,6 @@
 // India Travel PWA - Service Worker
 // Change CACHE_VERSION to force an update when you edit index.html
-const CACHE_VERSION = 'india-travel-v2';
+const CACHE_VERSION = 'india-travel-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',

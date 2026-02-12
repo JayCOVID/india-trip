@@ -60,7 +60,12 @@
 - The checklist state is saved locally on each device
 
 ## Security note
-GitHub Pages serves files publicly even for private repos IF Pages is enabled.
-Since this contains passport numbers, you have two options:
-1. Keep the repo private and accept that the Pages URL is technically accessible (but not indexed by search engines and not discoverable without the exact URL)
-2. For extra security, add a simple password gate — ask Claude to help add one
+The app is protected by a 4-digit PIN lock screen. The PIN is stored as a SHA-256 hash — the actual PIN does not appear anywhere in the code. Once a device enters the correct PIN, it's remembered permanently on that device (via localStorage).
+
+To change the PIN later:
+1. Generate a new SHA-256 hash of your new PIN at any SHA-256 tool online
+2. Replace the hash value in the `PIN_HASH` variable in `index.html`
+3. Bump the cache version in `sw.js`
+4. Commit to GitHub
+
+The repo can be public since no one can view the data without the PIN.
