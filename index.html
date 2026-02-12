@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="India Trip">
+<meta name="theme-color" content="#1B2838">
+<meta name="description" content="Miller-Narra family travel file — India, Feb 2026">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.svg">
+<link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+<title>India Trip · Miller-Narra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1B2838;
+  --navy2: #2A3E55;
+  --orange: #FF6B00;
+  --orange-bg: #FFF3EB;
+  --green: #138808;
+  --green-bg: #E8F5ED;
+  --red: #C0392B;
+  --red-bg: #FDEDEB;
+  --red-border: #F0C0B8;
+  --amber: #D4890A;
+  --amber-bg: #FEF8EC;
+  --amber-border: #F0DCA0;
+  --bg: #F5F1EB;
+  --card: #FAF8F4;
+  --white: #FFFFFF;
+  --border: #EDE8E0;
+  --divider: #F0ECE4;
+  --text: #1B2838;
+  --text-mid: #5A5A5A;
+  --text-light: #8A8A8A;
+  --text-muted: #B0A898;
+  --text-faint: #C0B8A8;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 14px;
+  --mono: 'JetBrains Mono', 'SF Mono', 'Menlo', monospace;
+  --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size:15px; -webkit-text-size-adjust:100%; }
+body { font-family:var(--sans); background:var(--bg); color:var(--text); line-height:1.55; min-height:100vh; min-height:100dvh; }
+button { font-family:inherit; }
+input { font-family:inherit; }
+
+/* Update banner */
+.update-banner {
+  display:none; position:fixed; top:0; left:0; right:0; z-index:1000;
+  background:var(--green); color:#fff; text-align:center;
+  padding:10px 16px; font-size:0.82rem; font-weight:600;
+  cursor:pointer; animation: slideDown 0.3s ease;
+}
+.update-banner.visible { display:block; }
+@keyframes slideDown { from{transform:translateY(-100%)} to{transform:translateY(0)} }
+
+/* App container */
+.app { max-width:440px; margin:0 auto; padding-bottom:60px; }
+
+/* Header */
+.header {
+  background:linear-gradient(145deg, var(--navy) 0%, var(--navy2) 60%, var(--navy) 100%);
+  color:#fff; padding:max(env(safe-area-inset-top, 20px), 28px) 20px 24px; position:relative; overflow:hidden;
+}
+.header-ring1 { position:absolute; top:-30px; right:-30px; width:120px; height:120px; border-radius:50%; border:1px solid rgba(255,107,0,0.12); }
+.header-ring2 { position:absolute; top:-10px; right:-10px; width:80px; height:80px; border-radius:50%; border:1px solid rgba(255,107,0,0.08); }
+.header-label { font-size:0.68rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:var(--orange); margin-bottom:6px; }
+.header-title { font-size:1.6rem; font-weight:800; line-height:1.15; letter-spacing:-0.01em; }
+.header-title .dot { color:var(--orange); }
+.header-sub { font-size:0.85rem; color:rgba(255,255,255,0.6); margin-top:6px; font-weight:500; }
+.status-pill {
+  display:inline-flex; align-items:center; gap:6px; margin-top:12px;
+  padding:4px 12px; border-radius:20px; font-size:0.75rem; font-weight:600;
+}
+.status-pill .dot { width:6px; height:6px; border-radius:50%; }
+.status-pre { background:rgba(255,107,0,0.15); color:#FF8A40; }
+.status-pre .dot { background:#FF8A40; }
+.status-active { background:rgba(19,136,8,0.2); color:#60D050; }
+.status-active .dot { background:#60D050; }
+.status-past { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.5); }
+.status-past .dot { background:rgba(255,255,255,0.4); }
+.header-stats {
+  display:flex; gap:20px; margin-top:16px; padding-top:14px;
+  border-top:1px solid rgba(255,255,255,0.08);
+}
+.stat { display:flex; align-items:center; gap:6px; }
+.stat-val { font-size:0.9rem; font-weight:700; }
+.stat-label { font-size:0.6rem; color:rgba(255,255,255,0.4); letter-spacing:0.05em; }
+.stat svg { opacity:0.35; }
+
+/* Alerts */
+.alerts { padding:16px 16px 0; display:flex; flex-direction:column; gap:8px; }
+.alert-box { display:flex; gap:8px; align-items:flex-start; padding:12px 14px; border-radius:var(--radius); font-size:0.8rem; line-height:1.45; }
+.alert-red { background:var(--red-bg); border:1px solid var(--red-border); color:#7A1A1A; }
+.alert-amber { background:var(--amber-bg); border:1px solid var(--amber-border); color:#6B4F10; }
+.alert-box svg { flex-shrink:0; margin-top:1px; }
+.alert-box strong { font-weight:700; }
+
+/* Search */
+.search-wrap { padding:16px 16px 0; }
+.search-box {
+  display:flex; align-items:center; gap:8px;
+  background:var(--white); border-radius:10px; padding:8px 12px;
+  border:1px solid var(--border);
+}
+.search-box input {
+  border:none; outline:none; font-size:0.85rem; width:100%;
+  background:transparent; color:var(--text);
+}
+.search-box input::placeholder { color:var(--text-muted); }
+.search-clear {
+  background:none; border:none; cursor:pointer; color:var(--text-muted);
+  font-size:0.85rem; padding:0 4px; line-height:1;
+}
+
+/* Sections */
+.content { padding:16px; display:flex; flex-direction:column; gap:12px; }
+.section { background:var(--card); border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border); }
+.section-header {
+  width:100%; display:flex; align-items:center; gap:10px;
+  padding:14px 16px; background:none; border:none; cursor:pointer; text-align:left;
+}
+.section-title { flex:1; font-size:0.95rem; font-weight:700; color:var(--text); }
+.section-badge {
+  font-size:0.68rem; font-weight:700; background:var(--orange);
+  color:#fff; border-radius:10px; padding:1px 8px;
+}
+.section-body { padding:0 16px 16px; display:none; }
+.section.open .section-body { display:block; }
+.section.open .chev { transform:rotate(180deg); }
+.chev { transition:transform 0.2s; color:var(--text-light); }
+
+/* Traveler cards */
+.travelers { display:flex; flex-direction:column; gap:10px; }
+.tcard { background:var(--white); border-radius:var(--radius); overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04); }
+.tcard-header {
+  width:100%; display:flex; align-items:center; gap:12px;
+  padding:14px 16px; background:none; border:none; cursor:pointer; text-align:left;
+}
+.tcard-avatar {
+  width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center;
+  color:#fff; font-size:0.8rem; font-weight:700; letter-spacing:0.04em; flex-shrink:0;
+}
+.tcard-name { font-size:0.95rem; font-weight:700; color:var(--text); }
+.tcard-relation { font-size:0.72rem; color:var(--text-light); margin-top:1px; }
+.tcard-body { padding:0 16px 16px; display:none; }
+.tcard.open .tcard-body { display:block; }
+.tcard-divider { height:1px; background:var(--divider); margin-bottom:14px; }
+
+/* Data fields */
+.data-section-label {
+  font-size:0.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.1em; color:var(--text-muted); margin-bottom:8px;
+  display:flex; align-items:center; gap:6px;
+}
+.data-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px 16px; }
+.data-label { font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-light); margin-bottom:2px; font-weight:500; }
+.data-value { font-size:0.88rem; font-weight:600; color:var(--text); word-break:break-all; }
+.data-value.mono { font-family:var(--mono); letter-spacing:0.04em; }
+.data-value.green { color:var(--green); }
+.data-value.red { color:var(--red); }
+.data-value.amber { color:var(--amber); }
+.data-section { margin-bottom:14px; }
+.data-section:last-child { margin-bottom:0; }
+
+/* Visa badge */
+.visa-badge {
+  display:inline-block; padding:2px 8px; border-radius:4px;
+  font-size:0.72rem; font-weight:700; letter-spacing:0.03em;
+}
+.visa-5yr { background:#E0F0FF; color:#0A4A8B; border:1px solid #A0C8E8; }
+.visa-30d { background:#FEF0D0; color:#8B5E00; border:1px solid #E8D090; }
+.visa-sticker { background:var(--green-bg); color:#0A6B2E; border:1px solid #B0D8B8; }
+
+/* Traveler alert inside card */
+.tcard-alert { margin-bottom:12px; }
+
+/* Flights */
+.flight-group-label {
+  font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;
+  margin-bottom:10px; display:flex; align-items:center; gap:6px;
+}
+.flight-group-label.outbound { color:var(--green); }
+.flight-group-label.ret { color:var(--orange); }
+.flights-list { display:flex; flex-direction:column; gap:8px; }
+.fcard {
+  background:var(--white); border-radius:10px; padding:12px 14px;
+  box-shadow:0 1px 2px rgba(0,0,0,0.05); border:1px solid var(--divider);
+}
+.fcard-route { display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+.fcard-city { font-size:1.1rem; font-weight:800; color:var(--text); font-family:var(--mono); letter-spacing:0.02em; }
+.fcard-flight {
+  font-size:0.72rem; font-weight:700; color:var(--orange); background:var(--orange-bg);
+  padding:2px 8px; border-radius:4px; margin-left:auto;
+}
+.fcard-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.layover {
+  text-align:center; padding:6px 0; font-size:0.68rem; font-weight:600;
+  letter-spacing:0.08em; color:var(--text-muted); display:flex; align-items:center;
+  gap:8px; justify-content:center;
+}
+.layover-line { flex:1; height:1px; background:var(--divider); max-width:60px; }
+.flight-divider { height:1px; background:var(--divider); margin:8px 0 14px; }
+.flight-summary {
+  margin-top:14px; padding:10px 12px; background:var(--white); border-radius:var(--radius-sm);
+  border:1px solid var(--border); font-size:0.78rem; color:var(--text-mid); line-height:1.5;
+}
+.flight-summary strong { color:var(--text); }
+
+/* Checklist */
+.checklist { display:flex; flex-direction:column; gap:2px; }
+.check-item {
+  display:flex; gap:10px; align-items:flex-start; padding:10px 8px;
+  background:transparent; border:none; border-radius:var(--radius-sm);
+  cursor:pointer; text-align:left; width:100%; transition:background 0.15s;
+}
+.check-item.done { background:#F0FBF0; }
+.check-text { font-size:0.82rem; line-height:1.45; color:#3A3A3A; }
+.check-item.done .check-text { color:#6A8A6A; text-decoration:line-through; }
+.check-sub { color:var(--text-light); display:block; font-size:0.72rem; }
+.check-icon { flex-shrink:0; margin-top:1px; }
+
+/* Support contacts */
+.contact-grid { display:grid; gap:10px; }
+.contact-card { background:var(--white); border-radius:var(--radius-sm); padding:10px 12px; border:1px solid var(--border); }
+
+/* Footer */
+.footer {
+  text-align:center; padding:20px 16px 40px; font-size:0.68rem;
+  color:var(--text-muted); line-height:1.6;
+}
+
+/* Empty search */
+.empty { text-align:center; padding:20px; color:var(--text-light); font-size:0.85rem; }
+
+/* SVG icons inline */
+.icon-sm { width:16px; height:16px; flex-shrink:0; }
+.icon-xs { width:12px; height:12px; }
+.icon-chev { width:16px; height:16px; }
+.icon-section { width:18px; height:18px; color:var(--orange); }
+</style>
+</head>
+<body>
+
+<!-- Update notification -->
+<div class="update-banner" id="updateBanner" onclick="location.reload()">
+  ✓ Updated travel info available — tap to refresh
+</div>
+
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-ring1"></div>
+    <div class="header-ring2"></div>
+    <div class="header-label">Miller–Narra Family</div>
+    <h1 class="header-title">India <span class="dot">·</span> Hyderabad</h1>
+    <div class="header-sub">Feb 14 – 28, 2026 · 12 nights</div>
+    <div class="status-pill" id="statusPill">
+      <div class="dot"></div>
+      <span id="statusText"></span>
+    </div>
+    <div class="header-stats">
+      <div class="stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <div><div class="stat-val">4</div><div class="stat-label">Travelers</div></div>
+      </div>
+      <div class="stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        <div><div class="stat-val">6</div><div class="stat-label">Flights</div></div>
+      </div>
+      <div class="stat">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><div class="stat-val">HYD</div><div class="stat-label">Destination</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRITICAL ALERTS -->
+  <div class="alerts">
+    <div class="alert-box alert-red">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div><strong>Anjani Devi:</strong> Must carry BOTH passports through immigration. Visa is in old passport 524314761.</div>
+    </div>
+    <div class="alert-box alert-amber">
+      <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="#D4890A" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <div><strong>Swathi:</strong> 30-day visa. Must enter by 22 May 2026. Double entry only.</div>
+    </div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#B0A898" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" placeholder="Search names, passport #, visa #..." oninput="filterTravelers()">
+      <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none">✕</button>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ═══ TRAVELERS ═══ -->
+    <div class="section open" id="sec-travelers">
+      <button class="section-header" onclick="toggleSection('sec-travelers')">
+        <svg class="icon-section" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span class="section-title">Travelers</span>
+        <span class="section-badge">4</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="section-body" id="travelersBody">
+        <div class="travelers" id="travelersList"></div>
+      </div>
+    </div>
+
+    <!-- ═══ FLIGHTS ═══ -->
+    <div class="section" id="sec-flights">
+      <button class="section-header" onclick="toggleSection('sec-flights')">
+        <svg class="icon-section" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>
+        <span class="section-title">Flights</span>
+        <span class="section-badge">6</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="section-body" id="flightsBody"></div>
+    </div>
+
+    <!-- ═══ e-ARRIVAL CARDS ═══ -->
+    <div class="section" id="sec-earrival">
+      <button class="section-header" onclick="toggleSection('sec-earrival')">
+        <svg class="icon-section" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <span class="section-title">e-Arrival Cards</span>
+        <span class="section-badge" style="background:#138808">✓ Filed</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="section-body" id="earrivalBody"></div>
+    </div>
+
+    <!-- ═══ CHECKLIST ═══ -->
+    <div class="section" id="sec-checklist">
+      <button class="section-header" onclick="toggleSection('sec-checklist')">
+        <svg class="icon-section" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span class="section-title">Pre-Departure Checklist</span>
+        <span class="section-badge" id="checkBadge">0/8</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="section-body" id="checklistBody"></div>
+    </div>
+
+    <!-- ═══ SUPPORT ═══ -->
+    <div class="section" id="sec-support">
+      <button class="section-header" onclick="toggleSection('sec-support')">
+        <svg class="icon-section" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <span class="section-title">India e-Visa Support</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="section-body">
+        <div class="contact-grid">
+          <div class="contact-card"><div class="data-label">e-Visa Phone</div><div class="data-value">(+91) 82 7808 7808</div></div>
+          <div class="contact-card"><div class="data-label">e-Visa Email</div><div class="data-value">indian-evisa@gov.in</div></div>
+          <div class="contact-card"><div class="data-label">e-Visa Portal</div><div class="data-value">indianvisaonline.gov.in/evisa</div></div>
+          <div class="contact-card"><div class="data-label">FRRO (in-India immigration)</div><div class="data-value">indianfrro.gov.in</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    This document contains sensitive information — do not share publicly.<br>
+    Miller–Narra India Travel File · Generated Feb 2026<br>
+    <span style="opacity:0.6" id="offlineStatus"></span>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════
+const TRAVELERS = [
+  {
+    id:"jay", name:"Jason M Miller", initials:"JM", relation:"Primary", dob:null, color:"#1B2838",
+    passport:{number:"664158377", expires:"04 Feb 2031"},
+    visa:{type:"5-Year Tourist", badge:"visa-5yr", eta:"900667A0Q", issued:"22 Jan 2026", expires:"21 Jan 2031", appId:"I041V0271626", entries:"Multiple"},
+    ktn:{number:"984474973", key:"F7XQF8QN5M5SP9GA"},
+    alerts:[]
+  },
+  {
+    id:"swathi", name:"Swathi Narra", initials:"SN", relation:"Spouse", dob:"04 Dec 1980", color:"#8B1A4A",
+    passport:{number:"646938552", expires:"17 Nov 2029"},
+    visa:{type:"30-Day Tourist", badge:"visa-30d", eta:"90066FFEQ", issued:null, expires:"30 days from entry", firstEntryBy:"22 May 2026", appId:"I041V0271526", entries:"Double"},
+    ktn:{number:"984495583"},
+    alerts:[{level:"amber", text:"30-day visa only. Must enter India on or before 22 May 2026. Expires 30 days after first entry. Double entry — not multiple."}]
+  },
+  {
+    id:"devi", name:"Devi Dahlia Georgia Miller", initials:"DM", relation:"Daughter · Minor", dob:"08 Oct 2020", color:"#D4890A",
+    passport:{number:"A04197322", expires:"22 Jan 2031"},
+    visa:{type:"5-Year Tourist", badge:"visa-5yr", eta:"9008F3ECQ", issued:"04 Feb 2026", expires:"03 Feb 2031", appId:"I041V03CE626", entries:"Multiple"},
+    ktn:{number:"160886167"},
+    alerts:[]
+  },
+  {
+    id:"anjani", name:"Anjani Devi Narra", initials:"AN", relation:"Mother-in-law", dob:"20 May 1947", color:"#138808",
+    passport:{number:"A51464137", expires:"15 Aug 2034"},
+    oldPassport:"524314761",
+    visa:{type:"Tourist Sticker", badge:"visa-sticker", number:"VK1223999", issued:"17 Nov 2016", expires:"16 Nov 2026", entries:"Multiple"},
+    ktn:null,
+    alerts:[{level:"red", text:"MUST carry BOTH passports. Visa is stamped in old passport (524314761). Present both at Indian immigration with current passport (A51464137)."}]
+  }
+];
+
+const OUTBOUND = [
+  {from:"MSY",to:"ORD",flight:"AA 1788",date:"Sat, 14 Feb",depart:"11:26 AM CST",arrive:"2:04 PM CST",duration:"2h 38m",airline:"American Airlines",terminal:"Arr: T3"},
+  {layover:"CHICAGO · ~4h 46m"},
+  {from:"ORD",to:"DOH",flight:"QR 726",date:"Sat, 14 Feb",depart:"6:50 PM CST",arrive:"5:00 PM +3 (Feb 15)",duration:"13h 10m",airline:"Qatar Airways"},
+  {layover:"DOHA · ~2h 55m"},
+  {from:"DOH",to:"HYD",flight:"QR 500",date:"Sun, 15 Feb",depart:"7:55 PM +3",arrive:"2:15 AM IST (Feb 16)",duration:"3h 50m",airline:"Qatar Airways"}
+];
+
+const RETURN = [
+  {from:"HYD",to:"DOH",flight:"QR 4775",date:"Sat, 28 Feb",depart:"3:05 AM IST",arrive:"5:20 AM +3",duration:"4h 45m",airline:"Qatar Airways"},
+  {layover:"DOHA · ~2h 40m"},
+  {from:"DOH",to:"DFW",flight:"QR 729",date:"Sat, 28 Feb",depart:"8:00 AM +3",arrive:"3:10 PM CST",duration:"16h 10m",airline:"Qatar Airways",terminal:"Arr: T-D"},
+  {layover:"DALLAS · ~4h 50m"},
+  {from:"DFW",to:"MSY",flight:"AA 1007",date:"Sat, 28 Feb",depart:"8:00 PM CST",arrive:"9:31 PM CST",duration:"1h 31m",airline:"American Airlines"}
+];
+
+const EARRIVALS = [
+  {name:"Jason McKay Miller", code:"AUSA03A97726", passport:"664158377", arrival:"16/02/2026"},
+  {name:"Swathi Narra", code:"AUSA03A97826", passport:"646938552", arrival:"16/02/2026"},
+  {name:"Devi Dahlia Georgia Miller", code:"AUSA03A97926", passport:"A04197322", arrival:"16/02/2026"},
+  {name:"Anjani Devi Narra", code:"AUSA03A97A26", passport:"A51464137", arrival:"16/02/2026"}
+];
+const EARRIVAL_COMMON = {
+  purpose:"Tourist",
+  nationality:"United States of America",
+  address:"Plot #572, Road #32, Telangana, Hyderabad",
+  mobile:"1-5047227747",
+  email:"jaymckaymiller@gmail.com",
+  generated:"13 Feb 2026, 04:17 IST"
+};
+
+const CHECKLIST = [
+  {id:"c1",text:"e-Arrival cards filed for all 4 travelers ✓",sub:"Completed 13 Feb 2026",done:true},
+  {id:"c2",text:"Confirm Anjani Devi has BOTH passports packed (old: 524314761 + current: A51464137)"},
+  {id:"c3",text:"Verify Swathi's 30-day visa window — must enter by 22 May 2026"},
+  {id:"c4",text:"Download offline Google Maps for Hyderabad region"},
+  {id:"c5",text:"Notify banks of international travel dates (Feb 14–28)"},
+  {id:"c6",text:"Print backup copies of all e-visas"},
+  {id:"c7",text:"Confirm travel insurance coverage for all travelers"},
+  {id:"c8",text:"Pack adaptor plugs (India uses Type C/D/M)"}
+];
+
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let openTravelers = {jay:true};
+let checkedItems = {};
+
+// Load checklist state from memory
+try {
+  const saved = JSON.parse(sessionStorage?.getItem?.('checklist') || '{}');
+  checkedItems = saved;
+} catch(e) {}
+
+// ════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function renderStatus() {
+  const now = new Date();
+  const start = new Date("2026-02-14T11:26:00-06:00");
+  const end = new Date("2026-02-28T21:31:00-06:00");
+  const pill = document.getElementById('statusPill');
+  const txt = document.getElementById('statusText');
+  const days = Math.ceil((start - now) / 864e5);
+
+  if (now > end) {
+    pill.className = 'status-pill status-past';
+    txt.textContent = 'Trip completed';
+  } else if (now >= start) {
+    pill.className = 'status-pill status-active';
+    txt.textContent = 'Trip in progress';
+  } else {
+    pill.className = 'status-pill status-pre';
+    txt.textContent = days <= 0 ? 'Departing today!' : days === 1 ? 'Departing tomorrow!' : days + ' days until departure';
+  }
+}
+
+function renderTravelers(filter) {
+  const q = (filter || '').toLowerCase();
+  const list = q ? TRAVELERS.filter(t =>
+    t.name.toLowerCase().includes(q) ||
+    t.passport.number.toLowerCase().includes(q) ||
+    (t.visa.eta||'').toLowerCase().includes(q) ||
+    (t.visa.number||'').toLowerCase().includes(q) ||
+    (t.ktn?.number||'').includes(q)
+  ) : TRAVELERS;
+
+  const container = document.getElementById('travelersList');
+  if (!list.length) {
+    container.innerHTML = '<div class="empty">No travelers match "' + escapeHtml(q) + '"</div>';
+    return;
+  }
+
+  container.innerHTML = list.map(t => {
+    const isOpen = !!openTravelers[t.id];
+    let alertsHtml = t.alerts.map(a =>
+      `<div class="tcard-alert"><div class="alert-box alert-${a.level}"><svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="${a.level==='red'?'#C0392B':'#D4890A'}" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><div>${a.text}</div></div></div>`
+    ).join('');
+
+    let visaFields = '';
+    if (t.visa.eta) visaFields += `<div><div class="data-label">ETA #</div><div class="data-value mono">${t.visa.eta}</div></div>`;
+    if (t.visa.number) visaFields += `<div><div class="data-label">Visa #</div><div class="data-value mono">${t.visa.number}</div></div>`;
+    visaFields += `<div><div class="data-label">Type</div><div class="data-value"><span class="visa-badge ${t.visa.badge}">${t.visa.type}</span></div></div>`;
+    if (t.visa.issued) visaFields += `<div><div class="data-label">Issued</div><div class="data-value">${t.visa.issued}</div></div>`;
+    visaFields += `<div><div class="data-label">Expires</div><div class="data-value${t.visa.expires.includes('30 days')?' amber':''}">${t.visa.expires}</div></div>`;
+    if (t.visa.firstEntryBy) visaFields += `<div><div class="data-label">First Entry By</div><div class="data-value amber">${t.visa.firstEntryBy}</div></div>`;
+    if (t.visa.appId) visaFields += `<div><div class="data-label">Application ID</div><div class="data-value mono">${t.visa.appId}</div></div>`;
+    visaFields += `<div><div class="data-label">Entries</div><div class="data-value">${t.visa.entries}</div></div>`;
+
+    let ktnHtml = '';
+    if (t.ktn) {
+      ktnHtml = `<div class="data-section"><div class="data-section-label">Known Traveler</div><div class="data-grid"><div><div class="data-label">KTN</div><div class="data-value mono">${t.ktn.number}</div></div>${t.ktn.key ? `<div><div class="data-label">Key</div><div class="data-value mono">${t.ktn.key}</div></div>` : ''}</div></div>`;
+    }
+
+    return `<div class="tcard${isOpen?' open':''}" id="tcard-${t.id}">
+      <button class="tcard-header" onclick="toggleTraveler('${t.id}')">
+        <div class="tcard-avatar" style="background:${t.color}">${t.initials}</div>
+        <div style="flex:1;min-width:0"><div class="tcard-name">${t.name}</div><div class="tcard-relation">${t.relation}${t.dob?' · DOB: '+t.dob:''}</div></div>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="${isOpen?'M18 15l-6-6-6 6':'M9 18l6-6-6-6'}"/></svg>
+      </button>
+      <div class="tcard-body">
+        <div class="tcard-divider"></div>
+        ${alertsHtml}
+        <div class="data-section">
+          <div class="data-section-label"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Passport</div>
+          <div class="data-grid">
+            <div><div class="data-label">Number</div><div class="data-value mono">${t.passport.number}</div></div>
+            <div><div class="data-label">Expires</div><div class="data-value green">${t.passport.expires}</div></div>
+            ${t.oldPassport ? `<div><div class="data-label">Old Passport (for visa)</div><div class="data-value mono red">${t.oldPassport}</div></div>` : ''}
+          </div>
+        </div>
+        <div class="data-section">
+          <div class="data-section-label">India Visa</div>
+          <div class="data-grid">${visaFields}</div>
+        </div>
+        ${ktnHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderFlights() {
+  const body = document.getElementById('flightsBody');
+  function flightCard(f) {
+    if (f.layover) return `<div class="layover"><div class="layover-line"></div><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>LAYOVER IN ${f.layover}<div class="layover-line"></div></div>`;
+    return `<div class="fcard">
+      <div class="fcard-route"><span class="fcard-city">${f.from}</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B00" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg><span class="fcard-city">${f.to}</span><span class="fcard-flight">${f.flight}</span></div>
+      <div class="fcard-grid">
+        <div><div class="data-label">Date</div><div class="data-value">${f.date}</div></div>
+        <div><div class="data-label">Depart</div><div class="data-value">${f.depart}</div></div>
+        <div><div class="data-label">Arrive</div><div class="data-value">${f.arrive}</div></div>
+        <div><div class="data-label">Duration</div><div class="data-value">${f.duration}</div></div>
+        <div><div class="data-label">Airline</div><div class="data-value">${f.airline}</div></div>
+        ${f.terminal ? `<div><div class="data-label">Terminal</div><div class="data-value">${f.terminal}</div></div>` : ''}
+      </div>
+    </div>`;
+  }
+
+  body.innerHTML = `
+    <div style="margin-bottom:14px">
+      <div class="flight-group-label outbound"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg> Outbound · Feb 14–16</div>
+      <div class="flights-list">${OUTBOUND.map(flightCard).join('')}</div>
+    </div>
+    <div class="flight-divider"></div>
+    <div>
+      <div class="flight-group-label ret"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform:scaleX(-1)"><path d="M17.8 19.2L16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg> Return · Feb 28</div>
+      <div class="flights-list">${RETURN.map(flightCard).join('')}</div>
+    </div>
+    <div class="flight-summary"><strong>Trip Summary:</strong> 12 nights in Hyderabad · Depart Feb 14 · Return Feb 28<br>Outbound: 3 flights, ~23h 33m total · Return: 3 flights, ~27h 26m total (home by 9:31 PM)</div>
+  `;
+}
+
+function renderEArrivals() {
+  const body = document.getElementById('earrivalBody');
+  body.innerHTML = `
+    <div style="margin-bottom:12px;padding:10px 12px;background:#F0FBF0;border:1px solid #B0D8B8;border-radius:var(--radius-sm);font-size:0.8rem;color:#1A6B2E;display:flex;gap:8px;align-items:flex-start">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#138808" stroke-width="2" style="flex-shrink:0;margin-top:1px"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <div>All 4 e-Arrival cards filed on <strong>13 Feb 2026</strong> for arrival on <strong>16 Feb 2026</strong>.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${EARRIVALS.map(e => `
+        <div class="fcard">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+            <div style="font-size:0.9rem;font-weight:700;color:var(--text)">${e.name}</div>
+            <span style="font-size:0.68rem;font-weight:700;color:#138808;background:#E8F5ED;padding:2px 8px;border-radius:4px;border:1px solid #B0D8B8">FILED</span>
+          </div>
+          <div class="fcard-grid">
+            <div><div class="data-label">Reference Code</div><div class="data-value mono">${e.code}</div></div>
+            <div><div class="data-label">Passport</div><div class="data-value mono">${e.passport}</div></div>
+            <div><div class="data-label">Arrival Date</div><div class="data-value">${e.arrival}</div></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="margin-top:12px;padding:10px 12px;background:var(--white);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:0.75rem;color:var(--text-mid);line-height:1.5">
+      <strong style="color:var(--text)">Common Details</strong><br>
+      Address: ${EARRIVAL_COMMON.address}<br>
+      Mobile: ${EARRIVAL_COMMON.mobile} · Email: ${EARRIVAL_COMMON.email}
+    </div>
+  `;
+}
+
+function renderChecklist() {
+  const body = document.getElementById('checklistBody');
+  const circleIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C0B8A8" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>';
+  const checkIcon = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#138808" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
+
+  body.innerHTML = '<div class="checklist">' + CHECKLIST.map(item => {
+    const done = item.done || !!checkedItems[item.id];
+    const locked = !!item.done; // pre-completed items can't be unchecked
+    return `<button class="check-item${done?' done':''}" onclick="${locked ? '' : "toggleCheck('"+item.id+"')"}" ${locked?'style="cursor:default"':''}>
+      <span class="check-icon">${done ? checkIcon : circleIcon}</span>
+      <span class="check-text">${item.text}${item.sub ? `<span class="check-sub">${item.sub}</span>` : ''}</span>
+    </button>`;
+  }).join('') + '</div>';
+
+  const count = CHECKLIST.filter(i => i.done).length + Object.values(checkedItems).filter(Boolean).length;
+  document.getElementById('checkBadge').textContent = count + '/' + CHECKLIST.length;
+}
+
+// ════════════════════════════════════════════════
+// INTERACTIONS
+// ════════════════════════════════════════════════
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function toggleTraveler(id) {
+  openTravelers[id] = !openTravelers[id];
+  renderTravelers(document.getElementById('searchInput').value);
+}
+
+function toggleCheck(id) {
+  checkedItems[id] = !checkedItems[id];
+  try { sessionStorage?.setItem?.('checklist', JSON.stringify(checkedItems)); } catch(e) {}
+  renderChecklist();
+}
+
+function filterTravelers() {
+  const q = document.getElementById('searchInput').value;
+  document.getElementById('searchClear').style.display = q ? 'block' : 'none';
+  renderTravelers(q);
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('searchClear').style.display = 'none';
+  renderTravelers();
+}
+
+// ════════════════════════════════════════════════
+// SERVICE WORKER REGISTRATION
+// ════════════════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').then(reg => {
+    // Check for updates
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'activated') {
+          document.getElementById('updateBanner').classList.add('visible');
+        }
+      });
+    });
+
+    // Check for updates every 5 minutes when online
+    setInterval(() => { reg.update(); }, 5 * 60 * 1000);
+
+    console.log('✓ Service worker registered — offline mode enabled');
+    document.getElementById('offlineStatus').textContent = '✓ Offline mode enabled';
+  }).catch(err => {
+    console.log('Service worker registration failed:', err);
+    document.getElementById('offlineStatus').textContent = 'Offline mode unavailable';
+  });
+}
+
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+renderStatus();
+renderTravelers();
+renderFlights();
+renderEArrivals();
+renderChecklist();
+
+// Update status every minute
+setInterval(renderStatus, 60000);
+
+// Online/offline indicator
+window.addEventListener('online', () => {
+  document.getElementById('offlineStatus').textContent = '✓ Online — checking for updates';
+});
+window.addEventListener('offline', () => {
+  document.getElementById('offlineStatus').textContent = '✓ Offline mode — all data available';
+});
+</script>
+</body>
+</html>
